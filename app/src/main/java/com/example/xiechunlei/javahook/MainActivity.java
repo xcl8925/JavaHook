@@ -2,8 +2,12 @@ package com.example.xiechunlei.javahook;
 
 import android.app.ActivityManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ShortcutManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -32,10 +36,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                startWrappedTopAct();
+//                startWrappedTopAct();
 //                startWrappedWPS();
 
 //                startActivity(new Intent(MainActivity.this, SecondActivity.class));
+                startClient();
+
+//                startWpsHomeRootActivity();
+//                startWps();
+
+                shortCut();
             }
         });
 
@@ -55,6 +65,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N_MR1)
+    public void shortCut() {
+        ShortcutManager shortcutManager = (ShortcutManager) getSystemService("shortcut");
+        shortcutManager.getDynamicShortcuts();
+    }
+
     private void startWrappedTopAct() {
         //                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
         Intent intent = new Intent();
@@ -70,6 +86,30 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setComponent(new ComponentName("com.kingsoft.moffice_pro",
                 "cn.wps.moffice.documentmanager.PreStartActivity"));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    public void startWps() {
+        Intent intent = new Intent();
+        intent.setComponent(new ComponentName("cn.wps.moffice_eng",
+                "cn.wps.moffice.documentmanager.PreStartActivity"));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    public void startClient() {
+        Intent intent = new Intent();
+        intent.setComponent(new ComponentName("com.example.xiechunlei.client",
+                "com.example.xiechunlei.client.SecondActivity"));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    public void startWpsHomeRootActivity() {
+        Intent intent = new Intent();
+        intent.setComponent(new ComponentName("cn.wps.moffice_eng",
+                "cn.wps.moffice.main.local.HomeRootActivity"));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
